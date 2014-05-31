@@ -4,7 +4,8 @@ import sys
 import json
 
 book = xlrd.open_workbook(sys.argv[1], formatting_info=True)
-sheet = book.sheet_by_name ("Expenditures")
+#sheet = book.sheet_by_name ("Expenditures")
+sheet = book.sheet_by_name ("Sheet1")
 
 formats = book.xf_list
 fonts = book.font_list
@@ -22,7 +23,6 @@ for idx in range(len(formats)):
   if f.font_index in boldFonts:
     boldFormats.append(idx)
 
-print boldFormats
 
 headerIdx = -1
 
@@ -34,7 +34,6 @@ for rownum in range(sheet.nrows):
       headerRun += 1
   if headerRun >= 3:
     headerIdx = rownum
-    print "Found headers at row", rownum
     break
 
 headerRow = sheet.row(headerIdx)
@@ -46,7 +45,6 @@ for idx in range(len(headerRow)):
   if len(headerCell.value):
     columnMap[idx] = headerCell.value
 
-print "Got headers:", columnMap
 
 alldata = []
 
