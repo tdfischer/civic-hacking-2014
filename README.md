@@ -1,5 +1,6 @@
 # Progress Report Parser
-## City of Akron - courtesty of National Day of Civic Hacking 2014
+
+Development done for the City of Akron as part of the of 2014 National Day of Civic Hacking
 
 ### Installation
 
@@ -22,3 +23,8 @@ From the command line, you can run:
 You can get information on what options are available by running:
 
     python parse.py --help
+
+
+### Sample data
+
+Sample data from the City of Akron's 2009, 2010, and 2011 fiscal years are in sample-data/
