@@ -39,7 +39,7 @@ class Spread(object):
 
     for idx in range(len(headerRow)):
       headerCell = headerRow[idx]
-      if len(headerCell.value):
+      if len(unicode(headerCell.value)):
         columnMap[idx] = headerCell.value
     columnMap.source_row = bestRow
     return columnMap
