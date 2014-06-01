@@ -5,6 +5,20 @@ import json
 from json import JSONEncoder
 from spreads import Spread
 
+class BudgetParser(object):
+  def __init__(self, filename):
+    spread = Spread(filename)
+    budget = BudgetData()
+
+    for p in spread.getTable('Sheet1'):
+      proj = budget.getProject(p['PROJECT'])
+      fund = proj.getAllocation(p['FUND'])
+      fund.forecast = p['FORECAST']
+      fund.budget = p['BUDGET']
+      fund.committed = p['COMMITTED']
+
+    print json.dumps(budget, indent=2, cls=BudgetEncoder)
+
 class BudgetEncoder(JSONEncoder):
   def default(self, o):
     if isinstance(o, BudgetData):
@@ -24,7 +38,7 @@ class BudgetEncoder(JSONEncoder):
         'forecast': o.forecast
       }
     if isinstance(o, FundingSource):
-      return {  
+      return {
         'name': o.name
       }
     return super(BudgetEncoder, self).default(o)
@@ -73,15 +87,3 @@ class FundingSource(object):
     super(FundingSource, self).__init__()
     self.symbol = symbol
     self.name = None
-
-spread = Spread(sys.argv[1])
-budget = BudgetData()
-
-for p in spread.getTable('Sheet1'):
-  proj = budget.getProject(p['PROJECT'])
-  fund = proj.getAllocation(p['FUND'])
-  fund.forecast = p['FORECAST']
-  fund.budget = p['BUDGET']
-  fund.committed = p['COMMITTED']
-
-print json.dumps(budget, indent=2, cls=BudgetEncoder)
