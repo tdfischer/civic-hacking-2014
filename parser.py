@@ -11,12 +11,23 @@ class BudgetParser(object):
     spread = Spread(filename)
     budget = BudgetData()
 
-    for p in spread.getTable('Sheet1'):
-      proj = budget.getProject(p['PROJECT'])
-      fund = proj.getAllocation(p['FUND'])
-      fund.forecast = p['FORECAST']
-      fund.budget = p['BUDGET']
-      fund.committed = p['COMMITTED']
+    data = spread.getTable('Sheet1',
+        joins={
+          'PROJECT': {'sheet': 'info', 'column': 'PROJECT'},
+          'FUND': {'sheet': 'funds', 'column': 'FUND'}
+        },
+        tolerance=lambda x:len(str(x['F1']))>0)
+
+    for p in data:
+      print p
+      proj = budget.getProject(p['PROJECT']['PROJECT'])
+      fundData = p['FUND']
+      alloc = proj.getAllocation(fundData['FUND'])
+      alloc.forecast = p['FORECAST']
+      alloc.budget = p['BUDGET']
+      alloc.committed = p['COMMITTED']
+      alloc.source.name = fundData['LABEL']
+      alloc.source.type = fundData['TYPE']
 
     print json.dumps(budget, indent=2, cls=BudgetEncoder)
 
@@ -29,8 +40,11 @@ class BudgetEncoder(JSONEncoder):
       }
     if isinstance(o, Project):
       return {
-        'description': o.description,
-        'allocations': o.allocations
+        'name': o.name,
+        'allocations': o.allocations,
+        'limits': o.limits,
+        'wards': o.wards,
+        'description': o.description
       }
     if isinstance(o, FundingAllocation):
       return {
@@ -39,8 +53,9 @@ class BudgetEncoder(JSONEncoder):
         'forecast': o.forecast
       }
     if isinstance(o, FundingSource):
-      return {
-        'name': o.name
+      return {  
+        'name': o.name,
+        'type': o.type
       }
     return super(BudgetEncoder, self).default(o)
 
@@ -88,3 +103,7 @@ class FundingSource(object):
     super(FundingSource, self).__init__()
     self.symbol = symbol
     self.name = None
+    self.type = None
+
+if __name__ == "__main__":
+  BudgetParser(sys.argv[1])
