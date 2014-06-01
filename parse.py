@@ -9,4 +9,4 @@ parser.add_argument('-f', '--format', default='json', dest='format',
                   help='format of output file, defaults to "json"', metavar='FORMAT')
 
 args = parser.parse_args()
-parser = BudgetParser(args.filename)
+parser = BudgetParser(args.filename, args.format)

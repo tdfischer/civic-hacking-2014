@@ -5,7 +5,7 @@ import json
 from json import JSONEncoder
 from model import *
 
-class JSONFormatter(object):
+class Formatter(object):
   def __init__(self, budget):
     self.budget = budget
 

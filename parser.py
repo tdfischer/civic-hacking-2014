@@ -2,12 +2,12 @@
 
 import xlrd
 import sys
-from formatter.json import JSONFormatter
+from importlib import import_module
 from spreads import Spread
 from model import *
 
 class BudgetParser(object):
-  def __init__(self, filename):
+  def __init__(self, filename, format):
     super(BudgetParser, self).__init__()
     spread = Spread(filename)
     budget = BudgetData()
@@ -20,7 +20,6 @@ class BudgetParser(object):
         tolerance=lambda x:len(str(x['F1']))>0)
 
     for p in data:
-      print p
       proj = budget.getProject(p['PROJECT']['PROJECT'])
       fundData = p['FUND']
       alloc = proj.getAllocation(fundData['FUND'])
@@ -30,5 +29,11 @@ class BudgetParser(object):
       alloc.source.name = fundData['LABEL']
       alloc.source.type = fundData['TYPE']
 
-    formatter = JSONFormatter(budget)
+    Formatter = self.formatter(format)
+    formatter = Formatter(budget)
     print formatter.generate()
+
+  @staticmethod
+  def formatter(format):
+    FormatterModule = import_module('formatter.%s' % format)
+    return getattr(FormatterModule, 'Formatter')
