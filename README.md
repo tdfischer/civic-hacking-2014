@@ -17,4 +17,8 @@ Finally, you can install the dependencies for the project by running:
 
 From the command line, you can run:
 
-    python progress-report.py path/to/file.xls
+    python parser.py path/to/file.xls
+
+You can get information on what options are available by running:
+
+    python parse.py --help
