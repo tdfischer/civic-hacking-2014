@@ -20,9 +20,24 @@ From the command line, you can run:
 
     python parser.py path/to/file.xls > file/to/save.json
 
+To change the format of the output file, you can pass an outputter. For example,
+to export the data in CSV format you can run:
+
+    python parser.py --format cvs path/to/file.xls > file/to/save.csv
+
 You can get information on what options are available by running:
 
     python parse.py --help
+
+#### CSV Export
+
+*Warning*: we ran out of time on the CSV output format and functionality for
+outputting the project allocations to a separate section needs to still be
+completed.
+
+We output data to the console by default so it can be output to a file. Since
+the CSV data crosses multiple tables and all output done at once, we split the
+different table information with delimeters and header rows in the output.
 
 
 ### Sample data
