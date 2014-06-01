@@ -7,6 +7,7 @@ from spreads import Spread
 
 class BudgetParser(object):
   def __init__(self, filename):
+    super(BudgetParser, self).__init__()
     spread = Spread(filename)
     budget = BudgetData()
 
