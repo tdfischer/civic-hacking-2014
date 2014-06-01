@@ -42,3 +42,4 @@ class FundingSource(object):
     super(FundingSource, self).__init__()
     self.symbol = symbol
     self.name = None
+    self.type = None

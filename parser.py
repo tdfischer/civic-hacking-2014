@@ -12,12 +12,23 @@ class BudgetParser(object):
     spread = Spread(filename)
     budget = BudgetData()
 
-    for p in spread.getTable('Sheet1'):
-      proj = budget.getProject(p['PROJECT'])
-      fund = proj.getAllocation(p['FUND'])
-      fund.forecast = p['FORECAST']
-      fund.budget = p['BUDGET']
-      fund.committed = p['COMMITTED']
+    data = spread.getTable('Sheet1',
+        joins={
+          'PROJECT': {'sheet': 'info', 'column': 'PROJECT'},
+          'FUND': {'sheet': 'funds', 'column': 'FUND'}
+        },
+        tolerance=lambda x:len(str(x['F1']))>0)
+
+    for p in data:
+      print p
+      proj = budget.getProject(p['PROJECT']['PROJECT'])
+      fundData = p['FUND']
+      alloc = proj.getAllocation(fundData['FUND'])
+      alloc.forecast = p['FORECAST']
+      alloc.budget = p['BUDGET']
+      alloc.committed = p['COMMITTED']
+      alloc.source.name = fundData['LABEL']
+      alloc.source.type = fundData['TYPE']
 
     formatter = JSONFormatter(budget)
     print formatter.generate()

@@ -21,8 +21,11 @@ class BudgetEncoder(JSONEncoder):
       }
     if isinstance(o, Project):
       return {
-        'description': o.description,
-        'allocations': o.allocations
+        'name': o.name,
+        'allocations': o.allocations,
+        'limits': o.limits,
+        'wards': o.wards,
+        'description': o.description
       }
     if isinstance(o, FundingAllocation):
       return {
@@ -32,6 +35,7 @@ class BudgetEncoder(JSONEncoder):
       }
     if isinstance(o, FundingSource):
       return {
-        'name': o.name
+        'name': o.name,
+        'type': o.type
       }
     return super(BudgetEncoder, self).default(o)
