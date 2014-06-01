@@ -17,7 +17,7 @@ Finally, you can install the dependencies for the project by running:
 
 From the command line, you can run:
 
-    python parser.py path/to/file.xls
+    python parser.py path/to/file.xls > file/to/save.json
 
 You can get information on what options are available by running:
 
